@@ -59,6 +59,7 @@ end
 
 function Workspace:Run()
     local require = function(ModuleName)
+        print("Using made require function")
         local Module = self:require(ModuleName)
         if not Module then
             print("Should handle regular require")
@@ -67,6 +68,7 @@ function Workspace:Run()
     end
 
     for ScriptName, Script in pairs (self.Scripts) do
+        print("Initializing Script", ScriptName)
         Script()
     end
     print("Workspace "..self.Name.." is running!")
