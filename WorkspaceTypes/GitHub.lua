@@ -1,11 +1,48 @@
-local GitHubWorkspace = {}
+local HttpService = game:GetService("HttpService")
 
-function GitHubWorkspace.new(Name, SourceURL, Settings, Preset)
 
+local function GetScriptsFromGitHub(RepositoryURL, Path)
+    local URL = URL.."contents/"..(Path or "")
+    local Scripts = {}
+
+    local Contents = game:HttpGet(URL)
+    for i, Content in pairs (Contents) do
+        local ScriptName = Content.name:match("(%w+).lua")
+        if ScriptName and Content.download_url then
+            local Source = game:HttpGet(Content.download_url)
+            Scripts[ScriptName] = loadstring(Source)
+        end
+    end
+
+    return Scripts
 end
 
-function GitHubWorkspace:AddModule()
 
+
+local GitHubWorkspace = {}
+
+function GitHubWorkspace.new(URL)
+    local NewGitHubWorkspace = setmetatable({
+        Modules = {},
+        Scripts = {},
+        GitHubURL = URL,
+    }, GitHubWorkspace)
+
+    NewGitHubWorkspace:LinkGitHub()
+
+    return NewGitHubWorkspace
+end
+
+function GitHubWorkspace:LinkGitHub(ModulesPath, ScriptsPath)
+    local Modules = GetScriptsFromGitHub(self.GitHubURL, ModulesPath or "Modules")
+    for ModuleName, ModuleScript in pairs (Modules) do
+        self:AddModule(ModuleName, ModuleScript)
+    end
+
+    local Scripts = GetScriptsFromGitHub(self.GitHubURL, ScriptsPath or "Modules")
+    for ScriptName, Script in pairs (Scripts) do
+        self:AddScript(ScriptName, Script)
+    end
 end
 
 
