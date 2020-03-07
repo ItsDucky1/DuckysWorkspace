@@ -11,7 +11,7 @@ local function GetScriptsFromGitHub(RepositoryURL, Path)
         local ScriptName = Content.name:match("(%w+).lua")
         if ScriptName and Content.download_url then
             local Source = game:HttpGet(Content.download_url)
-            Scripts[ScriptName] = loadstring(Source)
+            Scripts[ScriptName] = Source
         end
     end
 

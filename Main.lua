@@ -32,7 +32,7 @@ function Workspace:AddModule(Name, Source)
 end
 
 function Workspace:AddScript(ScriptName, Script)
-    self.Scripts[ScriptName] = coroutine.wrap(Script)
+    self.Scripts[ScriptName] = coroutine.wrap(loadstring(Script))
 end
 
 function Workspace:require(ModuleName)
