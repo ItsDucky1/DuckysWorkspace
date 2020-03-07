@@ -32,7 +32,7 @@ function Workspace:AddModule(Name, Source)
 end
 
 function Workspace:AddScript(ScriptName, Script)
-    self.Scripts[ScriptName] = coroutine.wrap(loadstring(Script))
+    self.Scripts[ScriptName] = loadstring(Source)
 end
 
 function Workspace:require(ModuleName)
@@ -69,7 +69,7 @@ function Workspace:Run()
 
     for ScriptName, Script in pairs (self.Scripts) do
         print("Initializing Script", ScriptName)
-        Script()
+        coroutine.wrap(Script)()
     end
     print("Workspace "..self.Name.." is running!")
 
