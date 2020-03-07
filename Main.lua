@@ -32,7 +32,7 @@ function Workspace:AddModule(Name, Source)
 end
 
 function Workspace:AddScript(ScriptName, Script)
-    self.Scripts[ScriptName] = loadstring(Source)
+    self.Scripts[ScriptName] = loadstring(Script)
 end
 
 function Workspace:require(ModuleName)
