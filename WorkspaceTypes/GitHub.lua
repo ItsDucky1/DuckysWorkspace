@@ -2,7 +2,7 @@ local HttpService = game:GetService("HttpService")
 
 
 local function GetScriptsFromGitHub(RepositoryURL, Path)
-    local URL = URL.."contents/"..(Path or "")
+    local URL = RepositoryURL.."contents/"..(Path or "")
     local Scripts = {}
 
     local Contents = game:HttpGet(URL)
