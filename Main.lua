@@ -68,7 +68,7 @@ function Workspace:Run()
     end
 
     for ScriptName, Script in pairs (self.Scripts) do
-        print("Initializing Script", ScriptName)
+        print("Scope Changed: Initializing Script", ScriptName)
         coroutine.wrap(Script)()
     end
     print("Workspace "..self.Name.." is running!")
