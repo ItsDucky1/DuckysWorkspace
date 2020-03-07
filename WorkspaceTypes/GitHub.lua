@@ -40,7 +40,7 @@ function GitHubWorkspace:LinkGitHub(ModulesPath, ScriptsPath)
         self:AddModule(ModuleName, ModuleScript)
     end
 
-    local Scripts = GetScriptsFromGitHub(self.GitHubURL, ScriptsPath or "Modules")
+    local Scripts = GetScriptsFromGitHub(self.GitHubURL, ScriptsPath or "Scripts")
     for ScriptName, Script in pairs (Scripts) do
         self:AddScript(ScriptName, Script)
     end
