@@ -4,4 +4,4 @@ function LocalWorkspace.new()
 
 end
 
-return Workspace
+return LocalWorkspace
