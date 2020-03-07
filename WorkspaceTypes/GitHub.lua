@@ -49,4 +49,4 @@ end
 
 
 
-return GithubWorkspace
+return GitHubWorkspace

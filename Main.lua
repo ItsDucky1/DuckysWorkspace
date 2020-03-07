@@ -91,7 +91,9 @@ local WorkspaceTypesURLArray = HttpService:JSONDecode(game:HttpGet(RepositoryURL
 for i, WorkspaceTypeObject in pairs (WorkspaceTypesURLArray) do
     local TypeName = WorkspaceTypeObject.name:match("(%w+).lua")
     local Source = game:HttpGet(WorkspaceTypeObject.download_url)
+    print(TypeName, Source)
     local Module = loadstring(Source)()
+    print(Module)
     Module.__index = Module
     setmetatable(Module, Workspace)
     WorkspaceTypes[TypeName] = Module
