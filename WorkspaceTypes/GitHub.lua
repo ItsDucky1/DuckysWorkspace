@@ -8,10 +8,10 @@ local function GetScriptsFromGitHub(RepositoryURL, Path)
     local Contents = game:HttpGet(URL)
     Contents = HttpService:JSONDecode(Contents)
     for i, Content in pairs (Contents) do
-        local ScriptName = Content.name:match("(%w+).lua")
-        if ScriptName and Content.download_url then
+        if Content.download_url then
+            local Name = Content.name
             local Source = game:HttpGet(Content.download_url)
-            Scripts[ScriptName] = Source
+            Scripts[Name] = Source
         end
     end
 

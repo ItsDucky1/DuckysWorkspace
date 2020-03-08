@@ -2,11 +2,17 @@ local HttpService = game:GetService("HttpService")
 local WorkspaceTypes = {}
 local RepositoryURL = "https://api.github.com/repos/ItsDucky1/DuckysWorkspace/"
 
+local SynapseEnv = getgenv()
+SynapseEnv.oldRequire = SynapseEnv.require
+SynapseEnv.require = nil
+getrenv().require = nil
+
 local Workspaces = {}
 
 local Workspace = {}
 Workspace.__index = Workspace
 setmetatable(Workspaces, Workspace)
+
 
 function Workspace.new(Name, Type, ...)
     local WorkspaceType = WorkspaceTypes[Type]
@@ -22,17 +28,25 @@ end
 
 function Workspace:GetModule(ModuleName)
     local Module = self.Modules[ModuleName] or self.Modules[ModuleName..".lua"]
+    return Module
 end
 
 function Workspace:AddModule(Name, Source)
+    print("Added Module ", Name, Source)
     local NewModule = {
         Loaded = false,
         Source = loadstring(Source)
     }
+    self.Modules[Name] = NewModule
+
+    return NewModule
 end
 
 function Workspace:AddScript(ScriptName, Script)
-    self.Scripts[ScriptName] = loadstring(Script)
+    print("Added Script ", ScriptName)
+    self.Scripts[ScriptName] = coroutine.wrap(loadstring(Script))
+
+    return Script.Scripts[ScriptName]
 end
 
 function Workspace:require(ModuleName)
@@ -58,18 +72,22 @@ function Workspace:require(ModuleName)
 end
 
 function Workspace:Run()
-    local require = function(ModuleName)
-        print("Using made require function")
+    require = function(ModuleName)
+        print("Override require func called ",ModuleName)
         local Module = self:require(ModuleName)
-        if not Module then
-            print("Should handle regular require")
-            -- Handle regular require
+        print("Module: ", Module)
+        if Module then
+            return Module
+        else
+            for i,v in pairs (self.Modules) do print(i, v) end
+            warn("Module not found with require, using reg require")
+            return oldRequire(ModuleName)
         end
     end
 
     for ScriptName, Script in pairs (self.Scripts) do
         print("Scope Changed: Initializing Script", ScriptName)
-        coroutine.wrap(Script)()
+        Script()
     end
     print("Workspace "..self.Name.." is running!")
 
